@@ -1,8 +1,9 @@
 package com.oauth2.demo.jwt;
 
-import javax.crypto.spec.SecretKeySpec;
+import java.math.BigDecimal;
+import java.util.Date;
 
-import com.alibaba.fastjson.JSONObject;
+import javax.crypto.spec.SecretKeySpec;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.CompressionCodecs;
@@ -13,6 +14,18 @@ public class JwtTokenProvider {
 	
 	
 	SecretKeySpec key;
+	
+	private BigDecimal days = new BigDecimal(30);
+	private BigDecimal hours = new BigDecimal(24);
+	private BigDecimal minuts = new BigDecimal(60);
+	private BigDecimal seconds = new BigDecimal(60);
+	private BigDecimal milliseconds = new BigDecimal(1000);
+	private BigDecimal time = days
+			.multiply(hours)
+			.multiply(minuts)
+			.multiply(seconds)
+			.multiply(milliseconds);
+	private Long expire_time = time.longValue();
 	 
     /**
      * @param key
@@ -29,8 +42,13 @@ public class JwtTokenProvider {
      * @return
      */
     public String createToken(Claims claims) {
-        String compactJws = Jwts.builder().setPayload(JSONObject.toJSONString(claims))
-                .compressWith(CompressionCodecs.DEFLATE).signWith(SignatureAlgorithm.HS512, key).compact();
+    	Date expiresDate = new Date(System.currentTimeMillis() + expire_time);// expire_time为token有效时长, 单位毫秒
+        String compactJws = Jwts.builder()
+        		.setClaims(claims)
+        		//.setPayload(JSONObject.toJSONString(claims))
+                .compressWith(CompressionCodecs.DEFLATE)
+                .setExpiration(expiresDate)
+                .signWith(SignatureAlgorithm.HS512, key).compact();
         return compactJws;
     }
  
