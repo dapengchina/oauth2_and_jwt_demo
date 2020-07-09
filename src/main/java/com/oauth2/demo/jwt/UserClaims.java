@@ -13,38 +13,19 @@ import io.jsonwebtoken.impl.JwtMap;
  */
 public class UserClaims extends JwtMap implements Claims {
    
-    private String userName; // 用户名
-    private String email; // 邮箱
-    private String phone; // 电话号码
+    private String uid; // 用户名
+    
  
     
  
-    public String getUserName() {
-        return userName;
-    }
- 
-    public void setUserName(String userName) {
-        this.userName = userName;
-        setValue("userName", this.userName);
-    }
- 
-    public String getEmail() {
-        return email;
-    }
- 
-    public void setEmail(String email) {
-        this.email = email;
-        setValue("email", this.email);
-    }
- 
-    public String getPhone() {
-        return phone;
-    }
- 
-    public void setPhone(String phone) {
-        this.phone = phone;
-        setValue("phone", this.phone);
-    }
+    public String getUid() {
+		return uid;
+	}
+
+	public void setUid(String uid) {
+		this.uid = uid;
+		setValue("uid", this.uid);
+	}
  
     @Override
     public String getIssuer() {
